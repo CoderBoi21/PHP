@@ -1,0 +1,54 @@
+Steps:
+1)install compozer
+2)Go to xamp->htdocs->cmd
+compozer create-project --prefer-dist laravel/laravel OnlineBookStore
+3)Viewa for webpages
+	routes/web.php for routing
+4)Create 4 routes for home,about,contact,shop and create four views too
+4.1) install Bootstrap and Laravel blade snippet and laravel snippets
+5)masterlayout creation
+use b4 then in title use b:yield and give title and in content use b:yield and give name content
+6)In each page use b:extends and give name masterlayout
+	then use b:section for title and content
+7)Then create data base in phpmyadmin
+8)connect db to project
+got to .env and change DB_DATABASE field
+change in config -> database.php -> mysql array and give db name and username as root
+9) Remove all database->migration files
+10) then create migration, controller and model using
+PHP artisan make:model contact -c -m
+11) Open web.php, contact from model,migration, and controller
+12) in migration contact.. 
+$table->string('name'); same for email and msg
+Run PHP migration migrate or use :fresh as end
+13)Go to models and in users copy $fillable and paste in contact  model
+'name','email', change password here with 'msg'
+14)Copy namespace of model->contact to controller->contact and change namespace to use
+15)Now create index function inside controller.. 
+public function index(){
+        return view('contact');
+    }
+16) Comment contact route in route/web.php
+and write
+Route::resource('/path(for us /contact)',ControllerName(for us ContactController)::class); //It is snippet Route:reso
+17) Import that controller function too (Go to contact controller and copy namespace use and add controller name after \
+18)Add one more function to controller to give query for create 
+public function store(Request $request){
+        $this->validate($request,[
+            'name_txt' => 'required',
+            'email_txt' => 'required',
+            'msg_txt' => 'required',
+        ]);
+
+        $contact_tbl = new contact([
+            'name'=> $request->get('name_txt'),
+            'email'=> $request->get('email_txt'),
+            'msg'=> $request->get('msg_txt'),
+        ]);
+
+        $contact_tbl->save();
+
+        return redirect('/');
+    }
+19) in our web page in form give action = {{ route('contact.store')  }}
+and add {{ csrf_field() }} below form line
